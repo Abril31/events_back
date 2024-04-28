@@ -7,12 +7,19 @@ const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, POSTGRES_URL } =
   process.env;
 
 const sequelize = new Sequelize(
-  //`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, // descomentar para probar localmente
-  POSTGRES_URL, // comentar para probar localmente
+  POSTGRES_URL ||
+    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+
   {
     dialect: "postgres",
     logging: false,
     native: false,
+    pool: {
+      max: 10,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   }
 );
 
